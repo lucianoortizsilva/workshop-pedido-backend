@@ -12,6 +12,7 @@ import com.lucianoortizsilva.workshoppedido.domain.Cidade;
 import com.lucianoortizsilva.workshoppedido.domain.Cliente;
 import com.lucianoortizsilva.workshoppedido.domain.Endereco;
 import com.lucianoortizsilva.workshoppedido.domain.Estado;
+import com.lucianoortizsilva.workshoppedido.domain.ItemPedido;
 import com.lucianoortizsilva.workshoppedido.domain.Pagamento;
 import com.lucianoortizsilva.workshoppedido.domain.PagamentoComBoleto;
 import com.lucianoortizsilva.workshoppedido.domain.PagamentoComCartao;
@@ -24,6 +25,7 @@ import com.lucianoortizsilva.workshoppedido.repositories.CidadeRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.ClienteRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.EnderecoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.EstadoRepository;
+import com.lucianoortizsilva.workshoppedido.repositories.ItemPedidoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.PagamentoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.PedidoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.ProdutoRepository;
@@ -55,19 +57,18 @@ public class Instantiation implements CommandLineRunner {
 	@Autowired
 	private PagamentoRepository pagamentoRepository;  
 	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	@Override
 	public void run(String... args) throws Exception {
 
-		this.categoriaRepository.deleteAll();
-		this.produtoRepository.deleteAll();
-
 		Categoria categoria1 = new Categoria(null, "Informática");
 		Categoria categoria2 = new Categoria(null, "Escritório");
 
-		Produto p1 = new Produto(null, "Computador", 2000.00);
-		Produto p2 = new Produto(null, "Impressora", 800.00);
-		Produto p3 = new Produto(null, "Mouse", 80.00);
+		Produto prod1 = new Produto(null, "Computador", 2000.00);
+		Produto prod2 = new Produto(null, "Impressora", 800.00);
+		Produto prod3 = new Produto(null, "Mouse", 80.00);
 
 		Estado estado1 = new Estado(null, "Rio Grande Do Sul");
 		Estado estado2 = new Estado(null, "Santa Catarina");
@@ -90,12 +91,23 @@ public class Instantiation implements CommandLineRunner {
 		Pagamento pagamento1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
 		Pagamento pagamento2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, sdf.parse("20/11/2017 00:00"), null);
 		
-		categoria1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-		categoria2.getProdutos().addAll(Arrays.asList(p2));
+		ItemPedido itemPedido1 = new ItemPedido(pedido1, prod1, 0.00, 1, 2000.00);
+		ItemPedido itemPedido2 = new ItemPedido(pedido1, prod3, 0.00, 2, 80.00);
+		ItemPedido itemPedido3 = new ItemPedido(pedido2, prod2, 100.00, 1, 800.00);
+		
+		categoria1.getProdutos().addAll(Arrays.asList(prod1, prod2, prod3));
+		categoria2.getProdutos().addAll(Arrays.asList(prod2));
 
-		p1.getCategorias().addAll(Arrays.asList(categoria1));
-		p2.getCategorias().addAll(Arrays.asList(categoria1, categoria2));
-		p3.getCategorias().addAll(Arrays.asList(categoria1));
+		prod1.getCategorias().addAll(Arrays.asList(categoria1));
+		prod2.getCategorias().addAll(Arrays.asList(categoria1, categoria2));
+		prod3.getCategorias().addAll(Arrays.asList(categoria1));
+		
+		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
+		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
+		
+		prod1.getItens().addAll(Arrays.asList(itemPedido1));
+		prod2.getItens().addAll(Arrays.asList(itemPedido3));
+		prod3.getItens().addAll(Arrays.asList(itemPedido2));
 
 		estado1.getCidades().addAll(Arrays.asList(cidade1));
 		estado2.getCidades().addAll(Arrays.asList(cidade2, cidade3));
@@ -108,13 +120,14 @@ public class Instantiation implements CommandLineRunner {
 		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
 		
 		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
-		this.produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
 		this.estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		this.cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
 		this.clienteRepository.saveAll(Arrays.asList(cliente1));
 		this.enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 		this.pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		this.pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
+		this.itemPedidoRepository.saveAll(Arrays.asList(itemPedido1, itemPedido2, itemPedido3));
 	}
 
 }
