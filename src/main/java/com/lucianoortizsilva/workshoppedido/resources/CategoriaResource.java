@@ -1,6 +1,8 @@
 package com.lucianoortizsilva.workshoppedido.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lucianoortizsilva.workshoppedido.domain.Categoria;
+import com.lucianoortizsilva.workshoppedido.dto.CategoriaDTO;
 import com.lucianoortizsilva.workshoppedido.service.CategoriaService;
 
 @RestController
@@ -24,6 +27,17 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService categoriaService;
 
+	
+	
+	
+	
+	@GetMapping
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		final List<Categoria> categorias = this.categoriaService.findAll();
+		final List<CategoriaDTO> categoriaDTOs = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(categoriaDTOs);
+	}
+	
 	
 	
 	
