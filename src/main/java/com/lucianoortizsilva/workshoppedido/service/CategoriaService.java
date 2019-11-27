@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucianoortizsilva.workshoppedido.domain.Categoria;
+import com.lucianoortizsilva.workshoppedido.dto.CategoriaDTO;
 import com.lucianoortizsilva.workshoppedido.exception.DataIntegrityException;
 import com.lucianoortizsilva.workshoppedido.exception.ObjectNotFoundException;
 import com.lucianoortizsilva.workshoppedido.repositories.CategoriaRepository;
@@ -21,10 +22,6 @@ public class CategoriaService {
 	@Autowired
 	private CategoriaRepository repository;
 
-	
-	
-	
-	
 	public Categoria find(Integer id) {
 		Optional<Categoria> obj = this.repository.findById(id);
 		if (!obj.isPresent()) {
@@ -33,45 +30,25 @@ public class CategoriaService {
 		return obj.get();
 	}
 
-	
-	
-	
-	
 	public List<Categoria> findAll() {
 		return this.repository.findAll();
 	}
-	
-	
-	
-	
-	
-	public Page<Categoria> findPage(Integer qtdPaginas, Integer qtdLinhas, String orderBy, String direction){
-		PageRequest pageRequest = PageRequest.of(qtdPaginas, qtdLinhas, Direction.valueOf(direction), orderBy); 
+
+	public Page<Categoria> findPage(Integer qtdPaginas, Integer qtdLinhas, String orderBy, String direction) {
+		PageRequest pageRequest = PageRequest.of(qtdPaginas, qtdLinhas, Direction.valueOf(direction), orderBy);
 		return this.repository.findAll(pageRequest);
 	}
-	
-	
-	
-	
-	
+
 	public Categoria insert(final Categoria obj) {
 		obj.setId(null);
-		return this.repository.save(obj); 
+		return this.repository.save(obj);
 	}
 
-	
-	
-	
-	
 	public Categoria update(Categoria categoria) {
 		this.find(categoria.getId());
 		return this.repository.save(categoria);
 	}
-	
-	
-	
-	
-	
+
 	public void delete(Integer id) {
 		this.find(id);
 		try {
@@ -81,5 +58,7 @@ public class CategoriaService {
 		}
 	}
 
-
+	public Categoria fromDTO(CategoriaDTO categoriaDTO) {
+		return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
+	}
 }
