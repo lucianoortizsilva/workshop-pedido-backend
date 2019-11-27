@@ -2,18 +2,41 @@ package com.lucianoortizsilva.workshoppedido.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.lucianoortizsilva.workshoppedido.service.validation.ClienteInsertValidator;
+
+@ClienteInsertValidator
 public class ClienteNewDTO implements Serializable {
 
 	private static final long serialVersionUID = -3787566100989640116L;
 
+	@NotEmpty(message = "Preenchimento Obrigatório")
+	@Length(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80 caracteres")
 	private String nome;
-	private String cpfOuCnpj;
+
+	@Email(message = "E-mail Inválido")
+	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String email;
+
+	@NotEmpty(message = "Preenchimento Obrigatório")
+	private String cpfOuCnpj;
+
+	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String logradouro;
+
+	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String numero;
 	private String complemento;
 	private String bairro;
+
+	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String cep;
+
+	@NotEmpty(message = "Preenchimento Obrigatório")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
