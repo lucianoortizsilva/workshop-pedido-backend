@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.lucianoortizsilva.workshoppedido.domain.Categoria;
@@ -30,6 +33,23 @@ public class CategoriaService {
 		return obj.get();
 	}
 
+	
+	
+	
+	
+	public List<Categoria> findAll() {
+		return this.repository.findAll();
+	}
+	
+	
+	
+	
+	
+	public Page<Categoria> findPage(Integer qtdPaginas, Integer qtdLinhas, String orderBy, String direction){
+		PageRequest pageRequest = PageRequest.of(qtdPaginas, qtdLinhas, Direction.valueOf(direction), orderBy); 
+		return this.repository.findAll(pageRequest);
+	}
+	
 	
 	
 	
@@ -61,12 +81,5 @@ public class CategoriaService {
 		}
 	}
 
-
-
-
-
-	public List<Categoria> findAll() {
-		return this.repository.findAll();
-	}
 
 }

@@ -65,6 +65,12 @@ public class Instantiation implements CommandLineRunner {
 
 		Categoria categoria1 = new Categoria(null, "Informática");
 		Categoria categoria2 = new Categoria(null, "Escritório");
+		Categoria categoria3 = new Categoria(null, "Chocolate");
+		Categoria categoria4 = new Categoria(null, "Biscoito");
+		Categoria categoria5 = new Categoria(null, "Bebida");
+		Categoria categoria6 = new Categoria(null, "Elétrico");
+		Categoria categoria7 = new Categoria(null, "Ferragem");
+		Categoria categoria8 = new Categoria(null, "Perfumaria");
 
 		Produto prod1 = new Produto(null, "Computador", 2000.00);
 		Produto prod2 = new Produto(null, "Impressora", 800.00);
@@ -119,7 +125,7 @@ public class Instantiation implements CommandLineRunner {
 		
 		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
 		
-		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
+		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3, categoria4, categoria5, categoria6, categoria7, categoria8));
 		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
 		this.estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		this.cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
