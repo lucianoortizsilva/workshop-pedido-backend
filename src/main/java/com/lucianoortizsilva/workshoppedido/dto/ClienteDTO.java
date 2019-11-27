@@ -8,7 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.lucianoortizsilva.workshoppedido.domain.Cliente;
+import com.lucianoortizsilva.workshoppedido.service.validation.ClienteUpdateValidator;
 
+@ClienteUpdateValidator
 public class ClienteDTO implements Serializable {
 
 	private static final long serialVersionUID = 7060721660274461708L;
