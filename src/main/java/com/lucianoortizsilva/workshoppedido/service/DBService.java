@@ -1,11 +1,11 @@
-package com.lucianoortizsilva.workshoppedido.config;
+package com.lucianoortizsilva.workshoppedido.service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import com.lucianoortizsilva.workshoppedido.domain.Categoria;
 import com.lucianoortizsilva.workshoppedido.domain.Cidade;
@@ -30,8 +30,8 @@ import com.lucianoortizsilva.workshoppedido.repositories.PagamentoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.PedidoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.ProdutoRepository;
 
-@Configuration
-public class Instantiation implements CommandLineRunner {
+@Service
+public class DBService {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
@@ -47,21 +47,21 @@ public class Instantiation implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private ClienteRepository clienteRepository;
-	
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
+
 	@Autowired
-	private PagamentoRepository pagamentoRepository;  
-	
+	private PagamentoRepository pagamentoRepository;
+
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+
 	
-	@Override
-	public void run(String... args) throws Exception {
+	public void instantiateDataBase() throws ParseException  {
 
 		Categoria categoria1 = new Categoria(null, "Informática");
 		Categoria categoria2 = new Categoria(null, "Escritório");
@@ -91,24 +91,25 @@ public class Instantiation implements CommandLineRunner {
 		Cidade cidade2 = new Cidade(null, "Balneário Camboriú", estado2);
 		Cidade cidade3 = new Cidade(null, "Itajaí", estado2);
 
-		Cliente cliente1 = new Cliente(null, "Luciano Ortiz", "luciano@gamil.com", "254159774-54", TipoCliente.PESSOA_FISICA);
+		Cliente cliente1 = new Cliente(null, "Luciano Ortiz", "luciano@gamil.com", "254159774-54",
+				TipoCliente.PESSOA_FISICA);
 		cliente1.getTelefones().addAll(Arrays.asList("5165982541", "5195126566"));
 
 		Endereco endereco1 = new Endereco(null, "Rua abc", "123", "fundos", "centro", "91452154", cliente1, cidade1);
 		Endereco endereco2 = new Endereco(null, "Rua def", "458", "frente", "ladeira", "58745112", cliente1, cidade2);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
-		
+
 		Pedido pedido1 = new Pedido(null, sdf.parse("30/09/2017 10:39"), cliente1, endereco1);
 		Pedido pedido2 = new Pedido(null, sdf.parse("30/09/2017 19:35"), cliente1, endereco2);
-		
+
 		Pagamento pagamento1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, pedido1, 6);
 		Pagamento pagamento2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, pedido2, sdf.parse("20/11/2017 00:00"), null);
-		
+
 		ItemPedido itemPedido1 = new ItemPedido(pedido1, prod1, 0.00, 1, 2000.00);
 		ItemPedido itemPedido2 = new ItemPedido(pedido1, prod3, 0.00, 2, 80.00);
 		ItemPedido itemPedido3 = new ItemPedido(pedido2, prod2, 100.00, 1, 800.00);
-		
+
 		categoria1.getProdutos().addAll(Arrays.asList(prod1, prod2, prod3));
 		categoria2.getProdutos().addAll(Arrays.asList(prod2, prod4));
 		categoria3.getProdutos().addAll(Arrays.asList(prod5, prod6));
@@ -116,7 +117,7 @@ public class Instantiation implements CommandLineRunner {
 		categoria5.getProdutos().addAll(Arrays.asList(prod8));
 		categoria6.getProdutos().addAll(Arrays.asList(prod9, prod10));
 		categoria7.getProdutos().addAll(Arrays.asList(prod11));
-		
+
 		prod1.getCategorias().addAll(Arrays.asList(categoria1, categoria4));
 		prod2.getCategorias().addAll(Arrays.asList(categoria1, categoria2, categoria4));
 		prod3.getCategorias().addAll(Arrays.asList(categoria1, categoria4));
@@ -128,10 +129,10 @@ public class Instantiation implements CommandLineRunner {
 		prod9.getCategorias().addAll(Arrays.asList(categoria6));
 		prod10.getCategorias().addAll(Arrays.asList(categoria6));
 		prod11.getCategorias().addAll(Arrays.asList(categoria7));
-		
+
 		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
 		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
-		
+
 		prod1.getItens().addAll(Arrays.asList(itemPedido1));
 		prod2.getItens().addAll(Arrays.asList(itemPedido3));
 		prod3.getItens().addAll(Arrays.asList(itemPedido2));
@@ -140,12 +141,12 @@ public class Instantiation implements CommandLineRunner {
 		estado2.getCidades().addAll(Arrays.asList(cidade2, cidade3));
 
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
-		
+
 		pedido1.setPagamento(pagamento1);
 		pedido2.setPagamento(pagamento2);
-		
+
 		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
-		
+
 		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3, categoria4, categoria5, categoria6, categoria7, categoria8));
 		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		this.estadoRepository.saveAll(Arrays.asList(estado1, estado2));
