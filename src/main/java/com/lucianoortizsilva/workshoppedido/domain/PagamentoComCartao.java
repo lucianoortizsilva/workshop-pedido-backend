@@ -2,9 +2,11 @@ package com.lucianoortizsilva.workshoppedido.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.lucianoortizsilva.workshoppedido.domain.enums.EstadoPagamento;
 
 @Entity
+@JsonTypeName(value = "pagamentoComCartao")
 public class PagamentoComCartao extends Pagamento {
 
 	private static final long serialVersionUID = -1524301041831108305L;

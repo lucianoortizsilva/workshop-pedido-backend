@@ -34,8 +34,9 @@ public class ItemPedido implements Serializable {
 
 	public double getSubTotal() {
 		return (this.preco.doubleValue() - this.desconto.doubleValue()) * this.quantidade.intValue();
-		
+
 	}
+
 	public Double getDesconto() {
 		return desconto;
 	}
@@ -75,6 +76,14 @@ public class ItemPedido implements Serializable {
 
 	public Produto getProduto() {
 		return this.id.getProduto();
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.id.setPedido(pedido);
+	}
+
+	public void setProduto(Produto produto) {
+		this.id.setProduto(produto);
 	}
 
 	@Override
