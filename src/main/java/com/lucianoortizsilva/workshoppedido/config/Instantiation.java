@@ -75,6 +75,14 @@ public class Instantiation implements CommandLineRunner {
 		Produto prod1 = new Produto(null, "Computador", 2000.00);
 		Produto prod2 = new Produto(null, "Impressora", 800.00);
 		Produto prod3 = new Produto(null, "Mouse", 80.00);
+		Produto prod4 = new Produto(null, "Mesa de escrotório", 300.00);
+		Produto prod5 = new Produto(null, "Toalha", 50.00);
+		Produto prod6 = new Produto(null, "Colcha", 200.00);
+		Produto prod7 = new Produto(null, "TV true color", 1200.00);
+		Produto prod8 = new Produto(null, "Roçadeira", 800.00);
+		Produto prod9 = new Produto(null, "Abajour", 100.00);
+		Produto prod10 = new Produto(null, "Copo", 180.00);
+		Produto prod11 = new Produto(null, "Shampo", 90.00);
 
 		Estado estado1 = new Estado(null, "Rio Grande Do Sul");
 		Estado estado2 = new Estado(null, "Santa Catarina");
@@ -102,11 +110,24 @@ public class Instantiation implements CommandLineRunner {
 		ItemPedido itemPedido3 = new ItemPedido(pedido2, prod2, 100.00, 1, 800.00);
 		
 		categoria1.getProdutos().addAll(Arrays.asList(prod1, prod2, prod3));
-		categoria2.getProdutos().addAll(Arrays.asList(prod2));
-
-		prod1.getCategorias().addAll(Arrays.asList(categoria1));
-		prod2.getCategorias().addAll(Arrays.asList(categoria1, categoria2));
-		prod3.getCategorias().addAll(Arrays.asList(categoria1));
+		categoria2.getProdutos().addAll(Arrays.asList(prod2, prod4));
+		categoria3.getProdutos().addAll(Arrays.asList(prod5, prod6));
+		categoria4.getProdutos().addAll(Arrays.asList(prod1, prod2, prod3, prod7));
+		categoria5.getProdutos().addAll(Arrays.asList(prod8));
+		categoria6.getProdutos().addAll(Arrays.asList(prod9, prod10));
+		categoria7.getProdutos().addAll(Arrays.asList(prod11));
+		
+		prod1.getCategorias().addAll(Arrays.asList(categoria1, categoria4));
+		prod2.getCategorias().addAll(Arrays.asList(categoria1, categoria2, categoria4));
+		prod3.getCategorias().addAll(Arrays.asList(categoria1, categoria4));
+		prod4.getCategorias().addAll(Arrays.asList(categoria2));
+		prod5.getCategorias().addAll(Arrays.asList(categoria3));
+		prod6.getCategorias().addAll(Arrays.asList(categoria3));
+		prod7.getCategorias().addAll(Arrays.asList(categoria4));
+		prod8.getCategorias().addAll(Arrays.asList(categoria5));
+		prod9.getCategorias().addAll(Arrays.asList(categoria6));
+		prod10.getCategorias().addAll(Arrays.asList(categoria6));
+		prod11.getCategorias().addAll(Arrays.asList(categoria7));
 		
 		pedido1.getItens().addAll(Arrays.asList(itemPedido1, itemPedido2));
 		pedido2.getItens().addAll(Arrays.asList(itemPedido3));
@@ -126,7 +147,7 @@ public class Instantiation implements CommandLineRunner {
 		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
 		
 		this.categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2, categoria3, categoria4, categoria5, categoria6, categoria7, categoria8));
-		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3));
+		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		this.estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		this.cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
 		this.clienteRepository.saveAll(Arrays.asList(cliente1));
