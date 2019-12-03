@@ -2,7 +2,7 @@ package com.lucianoortizsilva.workshoppedido.domain.enums;
 
 public enum EstadoPagamento {
 
-	PENDENTE(1, "Pessoa Física"), QUITADO(2, "Pessoa Jurídica"), CANCELADO(3, "Cancelado");
+	PENDENTE(1, "Pendente"), QUITADO(2, "Quitado"), CANCELADO(3, "Cancelado");
 
 	private int codigo;
 	private String descricao;

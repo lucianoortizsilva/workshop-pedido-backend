@@ -1,8 +1,11 @@
 package com.lucianoortizsilva.workshoppedido.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -138,4 +141,22 @@ public class Pedido implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		final NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		final StringBuilder builder = new StringBuilder();
+		builder.append("Pedido Número: ").append(getId()).append(", ");
+		builder.append("Instante: ").append(sdf.format(getInstante())).append(", ");
+		builder.append("Cliente: ").append(getCliente().getNome()).append(", ");
+		builder.append("Situação do pagamento: ").append(getPagamento().getEstadoPagamento().getDescricao());
+		builder.append("\nDetalhes:\n").append("");
+		for (ItemPedido itemPedido : itens) {
+			builder.append(itemPedido.toString());
+		}
+		builder.append("Valor Total: ").append(nf.format(getValorTotal()));
+		return builder.toString();
+	}
+
+	
 }

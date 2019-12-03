@@ -5,17 +5,16 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lucianoortizsilva.workshoppedido.domain.ItemPedido;
 import com.lucianoortizsilva.workshoppedido.domain.PagamentoComBoleto;
 import com.lucianoortizsilva.workshoppedido.domain.Pedido;
-import com.lucianoortizsilva.workshoppedido.domain.Produto;
 import com.lucianoortizsilva.workshoppedido.domain.enums.EstadoPagamento;
 import com.lucianoortizsilva.workshoppedido.exception.ObjectNotFoundException;
 import com.lucianoortizsilva.workshoppedido.repositories.ItemPedidoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.PagamentoRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.PedidoRepository;
-import com.lucianoortizsilva.workshoppedido.repositories.ProdutoRepository;
 
 @Service
 public class PedidoService {
@@ -30,10 +29,13 @@ public class PedidoService {
 	private PagamentoRepository pagamentoRepository;
 
 	@Autowired
-	private ProdutoRepository produtoRepository;
+	private ProdutoService produtoService; 
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 	
 	
 	public Pedido find(Integer id) {
@@ -44,9 +46,11 @@ public class PedidoService {
 		return obj.get();
 	}
 
+	@Transactional
 	public Pedido insert(Pedido obj) {
 		obj.setId(null);
 		obj.setInstante(new Date());
+		obj.setCliente(this.clienteService.find(obj.getCliente().getId()));
 		obj.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
 		obj.getPagamento().setPedido(obj);
 
@@ -59,12 +63,14 @@ public class PedidoService {
 		this.pagamentoRepository.save(obj.getPagamento());
 		for (ItemPedido i : obj.getItens()) {
 			i.setDesconto(0.0);
-			Optional<Produto> p =  this.produtoRepository.findById(i.getProduto().getId());
-			i.setPreco(p.get().getPreco());
+			i.setProduto(this.produtoService.find(i.getProduto().getId()));
+			i.setPreco(i.getProduto().getPreco());
 			i.setPedido(obj);
 		}
 
 		this.itemPedidoRepository.saveAll(obj.getItens());
+		
+		System.out.println(obj);
 		
 		return obj;
 	}

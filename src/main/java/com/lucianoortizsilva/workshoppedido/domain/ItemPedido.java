@@ -1,6 +1,8 @@
 package com.lucianoortizsilva.workshoppedido.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -111,4 +113,17 @@ public class ItemPedido implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		final NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduto().getNome()).append(", ");
+		builder.append("Quantidade: ").append(getQuantidade()).append(", ");
+		builder.append("Preço Unitário: ").append(nf.format(getPreco())).append(", ");
+		builder.append("Subtotal: ").append(nf.format(getSubTotal()));
+		builder.append("\n");
+		return builder.toString();
+	}
+
+	
 }
