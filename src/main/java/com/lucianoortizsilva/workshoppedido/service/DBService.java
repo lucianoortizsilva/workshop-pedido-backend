@@ -20,6 +20,7 @@ import com.lucianoortizsilva.workshoppedido.domain.PagamentoComCartao;
 import com.lucianoortizsilva.workshoppedido.domain.Pedido;
 import com.lucianoortizsilva.workshoppedido.domain.Produto;
 import com.lucianoortizsilva.workshoppedido.domain.enums.EstadoPagamento;
+import com.lucianoortizsilva.workshoppedido.domain.enums.Perfil;
 import com.lucianoortizsilva.workshoppedido.domain.enums.TipoCliente;
 import com.lucianoortizsilva.workshoppedido.repositories.CategoriaRepository;
 import com.lucianoortizsilva.workshoppedido.repositories.CidadeRepository;
@@ -97,9 +98,14 @@ public class DBService {
 
 		Cliente cliente1 = new Cliente(null, "Luciano Ortiz", "luciano.dev.tests@gmail.com", "254159774-54", TipoCliente.PESSOA_FISICA, passwordEncoder.encode("123456"));
 		cliente1.getTelefones().addAll(Arrays.asList("5165982541", "5195126566"));
+		
+		Cliente cliente2 = new Cliente(null, "Luciano Admin", "lucianoortizsilva@gmail.com", "316283827-40", TipoCliente.PESSOA_FISICA, passwordEncoder.encode("123456"));
+		cliente2.getTelefones().addAll(Arrays.asList("5165465465", "51951545454"));
+		cliente2.addPerfil(Perfil.ADMIN);
 
 		Endereco endereco1 = new Endereco(null, "Rua abc", "123", "fundos", "centro", "91452154", cliente1, cidade1);
 		Endereco endereco2 = new Endereco(null, "Rua def", "458", "frente", "ladeira", "58745112", cliente1, cidade2);
+		Endereco endereco3 = new Endereco(null, "Rua juju", "5454", "frente", "vila", "47745474", cliente2, cidade2);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
@@ -144,6 +150,7 @@ public class DBService {
 		estado2.getCidades().addAll(Arrays.asList(cidade2, cidade3));
 
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		cliente2.getEnderecos().addAll(Arrays.asList(endereco3));
 
 		pedido1.setPagamento(pagamento1);
 		pedido2.setPagamento(pagamento2);
@@ -154,8 +161,8 @@ public class DBService {
 		this.produtoRepository.saveAll(Arrays.asList(prod1, prod2, prod3, prod4, prod5, prod6, prod7, prod8, prod9, prod10, prod11));
 		this.estadoRepository.saveAll(Arrays.asList(estado1, estado2));
 		this.cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3));
-		this.clienteRepository.saveAll(Arrays.asList(cliente1));
-		this.enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		this.clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
+		this.enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2, endereco3));
 		this.pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		this.pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 		this.itemPedidoRepository.saveAll(Arrays.asList(itemPedido1, itemPedido2, itemPedido3));
