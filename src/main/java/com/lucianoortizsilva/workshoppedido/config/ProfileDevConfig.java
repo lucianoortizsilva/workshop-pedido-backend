@@ -24,7 +24,7 @@ public class ProfileDevConfig {
 	@Bean
 	public boolean instantiateDataBase() throws ParseException {
 
-		if ("create".equals(this.strategy) || "create-drop".equals(this.strategy)) {
+		if ("create".equals(this.strategy)) {
 			this.service.instantiateDataBase();
 			return true;
 		} else {
