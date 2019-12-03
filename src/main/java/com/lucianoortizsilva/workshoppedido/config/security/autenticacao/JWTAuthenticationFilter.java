@@ -1,4 +1,4 @@
-package com.lucianoortizsilva.workshoppedido.config.security;
+package com.lucianoortizsilva.workshoppedido.config.security.autenticacao;
 
 import java.io.IOException;
 import java.util.ArrayList;

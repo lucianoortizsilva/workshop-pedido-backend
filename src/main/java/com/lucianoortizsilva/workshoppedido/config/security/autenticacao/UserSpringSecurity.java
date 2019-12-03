@@ -1,4 +1,4 @@
-package com.lucianoortizsilva.workshoppedido.config.security;
+package com.lucianoortizsilva.workshoppedido.config.security.autenticacao;
 
 import java.util.Collection;
 import java.util.Set;

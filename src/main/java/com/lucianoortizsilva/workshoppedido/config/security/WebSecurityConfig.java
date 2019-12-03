@@ -17,6 +17,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.lucianoortizsilva.workshoppedido.config.security.autenticacao.JWTAuthenticationFilter;
+import com.lucianoortizsilva.workshoppedido.config.security.autenticacao.JWTUtil;
+import com.lucianoortizsilva.workshoppedido.config.security.autorizacao.JWTAuthorizationFilter;
+
 /**
  * 
  * https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
@@ -53,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, ACESSO_PUBLIC_GET).permitAll();
 		http.authorizeRequests().antMatchers(ACESSO_PUBLIC).permitAll().anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), this.jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), this.jwtUtil, this.userDetailsService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 

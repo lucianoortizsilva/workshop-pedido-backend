@@ -1,4 +1,4 @@
-package com.lucianoortizsilva.workshoppedido.config.security;
+package com.lucianoortizsilva.workshoppedido.config.security.autenticacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
