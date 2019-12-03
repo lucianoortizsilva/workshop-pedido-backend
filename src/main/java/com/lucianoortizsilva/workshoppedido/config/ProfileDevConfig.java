@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.lucianoortizsilva.workshoppedido.service.DBService;
+import com.lucianoortizsilva.workshoppedido.service.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -23,13 +24,18 @@ public class ProfileDevConfig {
 	@Bean
 	public boolean instantiateDataBase() throws ParseException {
 
-		if ("create".equals(this.strategy)) {
+		if ("create".equals(this.strategy) || "create-drop".equals(this.strategy)) {
 			this.service.instantiateDataBase();
 			return true;
 		} else {
 			return false;
 		}
 
+	}
+
+	@Bean
+	public SmtpEmailService emailEmailService() {
+		return new SmtpEmailService();
 	}
 
 }
