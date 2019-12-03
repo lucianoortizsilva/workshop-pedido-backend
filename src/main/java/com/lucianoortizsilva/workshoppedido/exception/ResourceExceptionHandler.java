@@ -43,5 +43,16 @@ public class ResourceExceptionHandler {
 		}
 		return ResponseEntity.status(status).body(validationError);
 	}
+
 	
+	
+	
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+		final HttpStatus status =  HttpStatus.FORBIDDEN;
+		StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Não Autorizado", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+
 }

@@ -14,12 +14,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.lucianoortizsilva.workshoppedido.config.security.autenticacao.UserSpringSecurity;
 import com.lucianoortizsilva.workshoppedido.domain.Cidade;
 import com.lucianoortizsilva.workshoppedido.domain.Cliente;
 import com.lucianoortizsilva.workshoppedido.domain.Endereco;
+import com.lucianoortizsilva.workshoppedido.domain.enums.Perfil;
 import com.lucianoortizsilva.workshoppedido.domain.enums.TipoCliente;
 import com.lucianoortizsilva.workshoppedido.dto.ClienteDTO;
 import com.lucianoortizsilva.workshoppedido.dto.ClienteNewDTO;
+import com.lucianoortizsilva.workshoppedido.exception.AuthorizationException;
 import com.lucianoortizsilva.workshoppedido.exception.DataIntegrityException;
 import com.lucianoortizsilva.workshoppedido.exception.ObjectNotFoundException;
 import com.lucianoortizsilva.workshoppedido.repositories.ClienteRepository;
@@ -38,6 +41,12 @@ public class ClienteService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	public Cliente find(Integer id) {
+		final UserSpringSecurity userSpringSecurity = UserService.authenticated(); 
+		
+		if(userSpringSecurity == null || !userSpringSecurity.hasRole(Perfil.ADMIN) && !id.equals(userSpringSecurity.getId())) {
+			throw new AuthorizationException("Acesso Negado!");	
+		}
+		
 		Optional<Cliente> obj = this.repository.findById(id);
 		if (!obj.isPresent()) {
 			throw new ObjectNotFoundException("Objeto não encontrado! Id: " + id);
