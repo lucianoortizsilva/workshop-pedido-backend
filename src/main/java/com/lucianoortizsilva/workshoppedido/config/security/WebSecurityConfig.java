@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,11 +31,14 @@ import com.lucianoortizsilva.workshoppedido.config.security.autorizacao.JWTAutho
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)//permite adicionar @PreAuthorize nos endpoints
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] ACESSO_PUBLIC = { "/h2-console/**" };
 
-	private static final String[] ACESSO_PUBLIC_GET = { "/produtos/**", "/categorias/**", "/clientes/**" };
+	private static final String[] ACESSO_PUBLIC_GET = { "/produtos/**", "/categorias/**" };
+	
+	private static final String[] ACESSO_PUBLIC_POST = { "/clientes/**" };
 
 	@Autowired
 	private Environment env;
@@ -55,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.cors().and().csrf().disable();
 		http.authorizeRequests().antMatchers(HttpMethod.GET, ACESSO_PUBLIC_GET).permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, ACESSO_PUBLIC_POST).permitAll();
 		http.authorizeRequests().antMatchers(ACESSO_PUBLIC).permitAll().anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), this.jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), this.jwtUtil, this.userDetailsService));

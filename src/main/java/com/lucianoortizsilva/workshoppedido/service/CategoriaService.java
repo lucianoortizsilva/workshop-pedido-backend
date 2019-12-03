@@ -40,14 +40,13 @@ public class CategoriaService {
 	}
 
 	public Categoria insert(final Categoria obj) {
+		return this.repository.save(obj);
+	}
+
+	public Categoria update(Categoria obj) {
 		final Categoria newObj = this.find(obj.getId());
 		updateData(newObj, obj);
 		return this.repository.save(newObj);
-	}
-
-	public Categoria update(Categoria categoria) {
-		this.find(categoria.getId());
-		return this.repository.save(categoria);
 	}
 
 	public void delete(Integer id) {
