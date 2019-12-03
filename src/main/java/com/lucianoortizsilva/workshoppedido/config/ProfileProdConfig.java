@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.lucianoortizsilva.workshoppedido.service.DBService;
+import com.lucianoortizsilva.workshoppedido.service.SmtpEmailService;
 
 @Configuration
 @Profile("prod")
@@ -30,6 +31,11 @@ public class ProfileProdConfig {
 			return false;
 		}
 
+	}
+
+	@Bean
+	public SmtpEmailService emailEmailService() {
+		return new SmtpEmailService();
 	}
 
 }
