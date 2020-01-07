@@ -38,7 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] ACESSO_PUBLIC_GET = { "/produtos/**", "/categorias/**" };
 	
-	private static final String[] ACESSO_PUBLIC_POST = { "/clientes/**", "/auth/forgot/**" };
+	private static final String[] ACESSO_PUBLIC_POST = { "/clientes",
+			                                             "/clientes/picture",
+			                                             "/auth/forgot/**" };
 
 	@Autowired
 	private Environment env;

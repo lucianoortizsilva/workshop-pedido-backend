@@ -1,5 +1,6 @@
 package com.lucianoortizsilva.workshoppedido.service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lucianoortizsilva.workshoppedido.config.security.autenticacao.UserSpringSecurity;
 import com.lucianoortizsilva.workshoppedido.domain.Cidade;
@@ -39,6 +41,9 @@ public class ClienteService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Cliente find(Integer id) {
 		final UserSpringSecurity userSpringSecurity = UserService.authenticated(); 
@@ -110,4 +115,8 @@ public class ClienteService {
 		return cliente;
 	}
 
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return	this.s3Service.uploadFile(multipartFile);
+	}
+	
 }
