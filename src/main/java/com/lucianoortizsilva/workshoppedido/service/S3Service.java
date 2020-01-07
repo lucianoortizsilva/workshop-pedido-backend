@@ -15,6 +15,7 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.lucianoortizsilva.workshoppedido.exception.FileException;
 
 @Service
 public class S3Service {
@@ -35,7 +36,7 @@ public class S3Service {
 			final String contentType = multipartFile.getContentType();
 			uri = this.uploadFile(is, filename, contentType);
 		} catch (Exception e) {
-			LOGGER.error("Erro de IO: ", e.getMessage());
+			throw new FileException("Erro de IO: " + e.getMessage());
 		}
 		return uri;
 	}
@@ -49,13 +50,8 @@ public class S3Service {
 			this.amazonS3.putObject(this.bucketName, filename, is, objectMetadata);
 			uri = this.amazonS3.getUrl(this.bucketName, filename).toURI();
 			LOGGER.info("UPLOAD Finalizado com sucesso!");
-		} catch (final AmazonServiceException e) {
-			LOGGER.info("AmazonServiceException: ", e.getErrorMessage());
-			LOGGER.info("Status code:", e.getErrorCode());
-		} catch (final AmazonClientException e) {
-			LOGGER.info("AmazonClientException:", e.getMessage());
 		} catch (final URISyntaxException e) {
-			LOGGER.info("URISyntaxException:", e.getMessage());
+			throw new FileException("Erro ao converter URL para URI: " + e.getMessage());
 		}
 		return uri;
 	}
