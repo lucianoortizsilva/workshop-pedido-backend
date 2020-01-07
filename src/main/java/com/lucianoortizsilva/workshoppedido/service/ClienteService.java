@@ -2,6 +2,7 @@ package com.lucianoortizsilva.workshoppedido.service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -116,7 +117,19 @@ public class ClienteService {
 	}
 
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return	this.s3Service.uploadFile(multipartFile);
+		final UserSpringSecurity userSpringSecurity = UserService.authenticated();
+		if(Objects.isNull(userSpringSecurity)) {
+			throw new AuthorizationException("Acesso Negado!");
+		}
+		final URI uri = this.s3Service.uploadFile(multipartFile);
+		final Optional<Cliente> cliente = this.repository.findById(userSpringSecurity.getId());
+		
+		if(cliente.isPresent()) {
+			cliente.get().setImageUrl(uri.toString());
+			this.repository.save(cliente.get());
+		}
+		
+		return	uri;
 	}
 	
 }
