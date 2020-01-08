@@ -1,5 +1,6 @@
 package com.lucianoortizsilva.workshoppedido.service;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,12 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefixoImagem;
 	
 	public Cliente find(Integer id) {
 		final UserSpringSecurity userSpringSecurity = UserService.authenticated(); 
@@ -121,15 +129,9 @@ public class ClienteService {
 		if(Objects.isNull(userSpringSecurity)) {
 			throw new AuthorizationException("Acesso Negado!");
 		}
-		final URI uri = this.s3Service.uploadFile(multipartFile);
-		final Optional<Cliente> cliente = this.repository.findById(userSpringSecurity.getId());
-		
-		if(cliente.isPresent()) {
-			cliente.get().setImageUrl(uri.toString());
-			this.repository.save(cliente.get());
-		}
-		
-		return	uri;
+		final BufferedImage jpgImage = this.imageService.getJpgImageFromFile(multipartFile);
+		final String filename = this.prefixoImagem + userSpringSecurity.getId() + ".jpg";
+		return this.s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), filename, "image");
 	}
 	
 }
