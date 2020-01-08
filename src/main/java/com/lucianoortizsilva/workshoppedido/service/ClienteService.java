@@ -54,6 +54,9 @@ public class ClienteService {
 	@Value("${img.prefix.client.profile}")
 	private String prefixoImagem;
 	
+	@Value("${img.profile.size}")
+	private Integer tamanhoImagem;
+	
 	public Cliente find(Integer id) {
 		final UserSpringSecurity userSpringSecurity = UserService.authenticated(); 
 		
@@ -129,7 +132,9 @@ public class ClienteService {
 		if(Objects.isNull(userSpringSecurity)) {
 			throw new AuthorizationException("Acesso Negado!");
 		}
-		final BufferedImage jpgImage = this.imageService.getJpgImageFromFile(multipartFile);
+		BufferedImage jpgImage = this.imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = this.imageService.recortarImage(jpgImage);
+		jpgImage = this.imageService.redimensionar(jpgImage, tamanhoImagem);
 		final String filename = this.prefixoImagem + userSpringSecurity.getId() + ".jpg";
 		return this.s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), filename, "image");
 	}
