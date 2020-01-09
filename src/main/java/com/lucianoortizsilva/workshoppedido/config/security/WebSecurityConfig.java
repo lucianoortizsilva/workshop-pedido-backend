@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] ACESSO_PUBLIC = { "/h2-console/**" };
 
-	private static final String[] ACESSO_PUBLIC_GET = { "/produtos/**", "/categorias/**" };
+	private static final String[] ACESSO_PUBLIC_GET = { "/produtos/**", "/categorias/**", "/estados/**" };
 	
 	private static final String[] ACESSO_PUBLIC_POST = { "/clientes", "/auth/forgot/**" };
 
