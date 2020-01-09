@@ -39,6 +39,14 @@ public class ClienteResource {
 		Cliente cliente = this.clienteService.find(id);
 		return ResponseEntity.ok().body(cliente);
 	}
+	
+	
+	
+	@GetMapping(value = "/email")
+	public ResponseEntity<Cliente> find(@RequestParam(value = "value") String email) {
+		Cliente cliente = this.clienteService.findByEmail(email);
+		return ResponseEntity.ok().body(cliente);
+	}
 
 	
 	
